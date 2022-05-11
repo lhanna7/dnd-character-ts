@@ -14,16 +14,18 @@ export class DnDCharacter {
         this.intelligence = DnDCharacter.generateAbilityScore();
         this.wisdom = DnDCharacter.generateAbilityScore();
         this.charisma = DnDCharacter.generateAbilityScore();
+        this.hitpoints = 10 + DnDCharacter.getModifierFor(this.constitution)
     }
 
     static generateAbilityScore() {
-        let topThree = this.topThreeDiceRolls
-        const sum = 0;
-        return topThree().reduce((prevValue, currValue) => prevValue + currValue, sum)
+        const topThree = this.topThreeDiceRolls();
+        return topThree.reduce(
+            (runningTotal: number, nextNumber: number) => runningTotal + nextNumber, 0
+        )
     }
 
     static topThreeDiceRolls() {
-        let diceRoll = []
+        const diceRoll: number[] = [];
         while (diceRoll.length < 4) {
             diceRoll.push(this.randomNumberGenerator())
         }
@@ -33,5 +35,9 @@ export class DnDCharacter {
 
     static randomNumberGenerator() {
         return Math.ceil(Math.random() * 6)
+    }
+
+    static getModifierFor(constitution: number) {
+        return Math.floor((constitution - 10) / 2)
     }
 }
